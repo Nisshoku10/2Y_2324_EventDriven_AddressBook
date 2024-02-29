@@ -1,0 +1,91 @@
+﻿<Window x:Class="_2Y_2324_EventDriven_AddressBook.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:_2Y_2324_EventDriven_AddressBook"
+        mc:Ignorable="d"
+        Title="Address_Book" Height="450" Width="800"
+        ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        FontFamily="Consolas">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="75"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="250"/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <Border Background="OrangeRed">
+            <Label Content="Orange Book" VerticalAlignment="Center" 
+                           HorizontalAlignment="Center" FontSize="30" 
+                           Foreground="White" FontFamily="Cookie"/>
+        </Border>
+
+        <Grid Grid.Row ="1" Grid.Column="0" Background="#fb9902">
+            <Border>
+                <ListBox x:Name="lbEntryList" Width="225" Height="315" 
+                         SelectionChanged="ListBox_SelectionChanged"
+                         FontSize="20"/>
+            </Border>
+        </Grid>
+
+        <Grid Grid.Row="0" Grid.Column="1" Background="#fb9902">
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                <TextBox x:Name="tbSrcEnt" Height="40" Width="350" Margin="0, 0, 30, 0" Text="Search" 
+                         VerticalContentAlignment="Center" HorizontalContentAlignment="Left"
+                         FontSize="25" Background="White" TextChanged="tbSrcEnt_TextChanged"
+                         GotFocus="tbSrcEnt_GotFocus"/>
+                <Button x:Name="btnClrSrc" Height="40" Width="115" Margin="0, 0, 30, 0"
+                        Background="White" Content="Clear"
+                        FontSize="25" FontWeight="Bold" Click="btnClrSrc_Click"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Grid.Row="1" Grid.Column="1" Background="#fc6902">
+            <StackPanel Orientation="Vertical" VerticalAlignment="Top" 
+                        HorizontalAlignment="Left" Margin="30, 0, 30, 0">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Margin="3, 15, 0, 15">
+                    <Label Content="Name: " Foreground="White" FontSize="20"/>
+                    <TextBox x:Name="tbName" Width="407" VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Left" Text="" FontSize="20" TextChanged="tbName_TextChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Margin="3, 15, 0, 15">
+                    <Label Content="Address: " Foreground="White" FontSize="20"/>
+                    <TextBox x:Name="tbAddr" Width="374" VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Left" Text="" FontSize="20" TextChanged="tbAddr_TextChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Margin="3, 15, 0, 15">
+                    <Label Content="Contact number: " Foreground="White" FontSize="20"/>
+                    <TextBox x:Name="tbContNum" Width="297" VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Left" Text="" FontSize="20" TextChanged="tbContNum_TextChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" 
+                            VerticalAlignment="Center" Margin="3, 15, 0, 15">
+                    <Label Content="Email-address: " Foreground="White" FontSize="20"/>
+                    <TextBox x:Name="tbEmAddr" Width="308" VerticalContentAlignment="Center"
+                             HorizontalContentAlignment="Left" Text="" FontSize="20" TextChanged="tbEmAddr_TextChanged"/>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal" Margin="0, 30, 0, 30">
+                    <Button x:Name="btnAddEnt" Width="100" Height="35" Margin="13, 0, 10, 0"
+                            Background="White" Content="Add"
+                            FontSize="20" FontWeight="Bold" Click="btnAddEnt_Click"/>
+                    <Button x:Name="btnUpdEnt" Width="100" Height="35" Margin="10, 0, 10, 0"
+                            Background="White" Content="Update"
+                            FontSize="20" FontWeight="Bold" Click="btnUpdEnt_Click"/>
+                    <Button x:Name="btnDelEnt" Width="100" Height="35" Margin="10, 0, 10, 0"
+                            Background="White" Content="Delete"
+                            FontSize="20" FontWeight="Bold" Click="btnDelEnt_Click"/>
+                    <Button x:Name="btnClrEnt" Width="100" Height="35" Margin="10, 0, 10, 0"
+                            Background="White" Content="Clear"
+                            FontSize="20" FontWeight="Bold" Click="btnClrEnt_Click"/>
+                </StackPanel>
+            </StackPanel>
+        </Grid> 
+    </Grid>
+</Window>

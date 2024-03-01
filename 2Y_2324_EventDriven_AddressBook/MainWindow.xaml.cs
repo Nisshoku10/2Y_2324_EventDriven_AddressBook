@@ -1,14 +1,8 @@
-﻿using System.Text;
+﻿using _2Y_2324_EventDriven_AddressBook.Fonts.Dancing_Script;
+using System.IO;
+using System.Text;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
-using System.Xml.Linq;
 
 namespace _2Y_2324_EventDriven_AddressBook
 {
@@ -20,9 +14,15 @@ namespace _2Y_2324_EventDriven_AddressBook
         Entries _ent = new Entries();
         List<string[]> _entries = new List<string[]>();
         private string searchEntry = "";
+        string path = @"D:\\Codes\\C#\\WPF\\2Y_2324_EventDriven_AddressBook\\2Y_2324_EventDriven_AddressBook\\Entries.csv";
         public MainWindow()
         {
             InitializeComponent();
+
+            if (File.Exists(path))
+                ReadFile();
+            else
+                this.Close();
 
             btnAddEnt.IsEnabled = false;
             btnUpdEnt.IsEnabled = false;
@@ -154,6 +154,31 @@ namespace _2Y_2324_EventDriven_AddressBook
             tbAddr.Text = string.Empty;
             tbContNum.Text = string.Empty;
             tbEmAddr.Text = string.Empty;
+        }
+
+        private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            using (StreamWriter sw = new StreamWriter(path))
+            {
+                for (int i = 0; i < _entries.Count; i++)
+                {
+                    sw.WriteLine(_entries[i][0] + "," + _entries[i][1] + "," + _entries[i][2] + "," + _entries[i][3]);
+                }
+            }
+        }
+
+        private void ReadFile()
+        {
+            using(StreamReader sr = new StreamReader(path))
+            {
+                string line = string.Empty;
+
+                while((line = sr.ReadLine()) != null)
+                { 
+                    string[] values = line.Split(',');
+                    _entries.Add(values);
+                }
+            }
         }
     }
 }

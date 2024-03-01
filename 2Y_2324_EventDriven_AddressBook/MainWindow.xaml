@@ -8,7 +8,8 @@
         Title="Address_Book" Height="450" Width="800"
         ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        FontFamily="Consolas">
+        FontFamily="Consolas"
+        Closing="Window_Closing">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="75"/>

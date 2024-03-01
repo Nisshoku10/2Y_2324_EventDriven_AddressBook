@@ -1,6 +1,4 @@
-﻿using _2Y_2324_EventDriven_AddressBook.Fonts.Dancing_Script;
-using System.IO;
-using System.Text;
+﻿using System.IO;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -15,6 +13,7 @@ namespace _2Y_2324_EventDriven_AddressBook
         List<string[]> _entries = new List<string[]>();
         private string searchEntry = "";
         string path = @"D:\\Codes\\C#\\WPF\\2Y_2324_EventDriven_AddressBook\\2Y_2324_EventDriven_AddressBook\\Entries.csv";
+        private int _ContNum = 0;
         public MainWindow()
         {
             InitializeComponent();
@@ -22,7 +21,7 @@ namespace _2Y_2324_EventDriven_AddressBook
             if (File.Exists(path))
                 ReadFile();
             else
-                this.Close();
+                NoFileExists();
 
             btnAddEnt.IsEnabled = false;
             btnUpdEnt.IsEnabled = false;
@@ -48,10 +47,31 @@ namespace _2Y_2324_EventDriven_AddressBook
                     }
                 }
             }
+
+            tbSrcEnt.Text = "";
         }
         private void tbSrcEnt_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchEntry = tbSrcEnt.Text;
+            lbEntryList.Items.Clear(); 
+
+            if (searchEntry.Length > 0)
+            {
+                for (int i = 0; i < _entries.Count; i++)
+                {
+                    if (_entries[i][0].ToLower().Contains(searchEntry.ToLower()))
+                    {
+                        lbEntryList.Items.Add(_entries[i][0]);
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < _entries.Count; i++)
+                {
+                    lbEntryList.Items.Add(_entries[i][0]);
+                }
+            }
         }
         private void btnClrSrc_Click(object sender, RoutedEventArgs e)
         {
@@ -80,6 +100,7 @@ namespace _2Y_2324_EventDriven_AddressBook
         private void tbName_TextChanged(object sender, TextChangedEventArgs e)
         {
             _ent.getName = tbName.Text;
+            CheckFields();
         }
         private void tbAddr_TextChanged(object sender, TextChangedEventArgs e)
         {
@@ -98,10 +119,18 @@ namespace _2Y_2324_EventDriven_AddressBook
             _ent.getEmailAddress = tbEmAddr.Text;
             CheckFields();
         }
+        private void CheckFields()
+        {
+            if (tbName.Text.Length > 0 && tbAddr.Text.Length > 0 && tbContNum.Text.Length > 0 && tbEmAddr.Text.Length > 0)
+            {
+                btnAddEnt.IsEnabled = true;
+            }
+            btnAddEnt.IsEnabled = false;
+        }
         #endregion
         private void btnAddEnt_Click(object sender, RoutedEventArgs e)
         {
-            string[] person = [_ent.getName, _ent.getAddress, _ent.getPhoneNum, _ent.getEmailAddress];
+            string[] person = [_ent.getName, _ent.getAddress, tbContNum.Text, _ent.getEmailAddress];
             _entries.Add(person);
             lbEntryList.Items.Add(person[0]);
 
@@ -113,14 +142,6 @@ namespace _2Y_2324_EventDriven_AddressBook
             MessageBox.Show("Entry was already added");
 
         }
-        private void CheckFields()
-        {
-            if (tbName.Text.Length > 0 && tbAddr.Text.Length > 0 && tbContNum.Text.Length > 0 && tbEmAddr.Text.Length > 0)
-            {
-                btnAddEnt.IsEnabled = true;
-            }
-        }
-
         private void btnUpdEnt_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < lbEntryList.Items.Count; i++)
@@ -139,7 +160,6 @@ namespace _2Y_2324_EventDriven_AddressBook
 
             MessageBox.Show("Entry was already updated");
         }
-
         private void btnDelEnt_Click(object sender, RoutedEventArgs e)
         {
             for (int i = 0; i < lbEntryList.Items.Count; i++)
@@ -147,6 +167,10 @@ namespace _2Y_2324_EventDriven_AddressBook
                 if (lbEntryList.SelectedIndex == i)
                 {
                     lbEntryList.Items.RemoveAt(i);
+                    for (int j = 0; j < _entries.Count; j++)
+                    {
+                        _entries.RemoveAt(j);
+                    }
                 }
             }
 
@@ -155,7 +179,28 @@ namespace _2Y_2324_EventDriven_AddressBook
             tbContNum.Text = string.Empty;
             tbEmAddr.Text = string.Empty;
         }
+        #region FileReadWriteEvents
+        private void ReadFile()
+        {
+            using (StreamReader sr = new StreamReader(path))
+            {
+                string line = string.Empty;
 
+                while ((line = sr.ReadLine()) != null)
+                {
+                    string[] values = line.Split(',');
+                    _entries.Add(values);
+                    lbEntryList.Items.Add(values[0]);
+                }
+            }
+        }
+        private void NoFileExists()
+        {
+            using (StreamWriter ss = new StreamWriter(path))
+            {
+                ss.WriteLine();
+            }
+        }
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
             using (StreamWriter sw = new StreamWriter(path))
@@ -166,19 +211,6 @@ namespace _2Y_2324_EventDriven_AddressBook
                 }
             }
         }
-
-        private void ReadFile()
-        {
-            using(StreamReader sr = new StreamReader(path))
-            {
-                string line = string.Empty;
-
-                while((line = sr.ReadLine()) != null)
-                { 
-                    string[] values = line.Split(',');
-                    _entries.Add(values);
-                }
-            }
-        }
+        #endregion
     }
 }

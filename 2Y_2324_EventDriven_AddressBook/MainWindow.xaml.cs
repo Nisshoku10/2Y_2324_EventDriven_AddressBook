@@ -29,8 +29,10 @@ namespace _2Y_2324_EventDriven_AddressBook
             btnClrEnt.IsEnabled = true;
             btnClrSrc.IsEnabled = true;
         }
+        #region List Box Events
         private void ListBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            btnAddEnt.IsEnabled = false;
             btnUpdEnt.IsEnabled = true;
             btnDelEnt.IsEnabled = true;
 
@@ -53,7 +55,7 @@ namespace _2Y_2324_EventDriven_AddressBook
         private void tbSrcEnt_TextChanged(object sender, TextChangedEventArgs e)
         {
             string searchEntry = tbSrcEnt.Text;
-            lbEntryList.Items.Clear(); 
+            lbEntryList.Items.Clear();
 
             if (searchEntry.Length > 0)
             {
@@ -79,6 +81,7 @@ namespace _2Y_2324_EventDriven_AddressBook
             CheckFields();
         }
 
+        #endregion
         #region SearchBoxEvents
         private void tbSrcEnt_GotFocus(object sender, RoutedEventArgs e)
         {
@@ -111,6 +114,14 @@ namespace _2Y_2324_EventDriven_AddressBook
         private void tbContNum_TextChanged(object sender, TextChangedEventArgs e)
         {
             _ent.getPhoneNum = tbContNum.Text;
+            if (!isNum(tbContNum.Text))
+            {
+                MessageBox.Show("Please enter a valid phone number.");
+                btnAddEnt.IsEnabled = false;
+                btnUpdEnt.IsEnabled = false;
+                return;
+            }
+
             CheckFields();
         }
 
@@ -121,15 +132,34 @@ namespace _2Y_2324_EventDriven_AddressBook
         }
         private void CheckFields()
         {
-            if (tbName.Text.Length > 0 && tbAddr.Text.Length > 0 && tbContNum.Text.Length > 0 && tbEmAddr.Text.Length > 0)
+            bool checktbLength = tbName.Text.Length > 0 && tbAddr.Text.Length > 0 && tbContNum.Text.Length > 0 && tbEmAddr.Text.Length > 0;
+            btnAddEnt.IsEnabled = checktbLength;
+        }
+        private bool isNum(string input)
+        {
+            if (string.IsNullOrWhiteSpace(input))
             {
-                btnAddEnt.IsEnabled = true;
+                return false;
             }
-            btnAddEnt.IsEnabled = false;
+
+            int num = 0;
+            if (!int.TryParse(input, out num))
+            {
+                return false;
+            }
+
+            return true;
         }
         #endregion
+        #region Button Events
         private void btnAddEnt_Click(object sender, RoutedEventArgs e)
         {
+            if (!isNum(tbContNum.Text))
+            {
+                MessageBox.Show("Please enter a valid phone number.");
+                return;
+            }
+
             string[] person = [_ent.getName, _ent.getAddress, tbContNum.Text, _ent.getEmailAddress];
             _entries.Add(person);
             lbEntryList.Items.Add(person[0]);
@@ -144,6 +174,12 @@ namespace _2Y_2324_EventDriven_AddressBook
         }
         private void btnUpdEnt_Click(object sender, RoutedEventArgs e)
         {
+            if (!isNum(tbContNum.Text))
+            {
+                MessageBox.Show("Please enter a valid phone number.");
+                return;
+            }
+
             for (int i = 0; i < lbEntryList.Items.Count; i++)
             {
                 if (lbEntryList.SelectedIndex == i)
@@ -179,6 +215,7 @@ namespace _2Y_2324_EventDriven_AddressBook
             tbContNum.Text = string.Empty;
             tbEmAddr.Text = string.Empty;
         }
+        #endregion
         #region FileReadWriteEvents
         private void ReadFile()
         {
